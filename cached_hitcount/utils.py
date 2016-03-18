@@ -4,11 +4,18 @@ from gargoyle import gargoyle
 from user_agents import parse
 from functools import wraps
 from django.conf import settings
-from django.core.cache import cache, get_cache
+from django.core.cache import cache
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Sum
 
-
+try:
+    # get_cache has been removed in Django 1.9: use caches instead
+    from django.core.cache import caches
+    def get_cache(cache_name):
+        return caches[cache_name]
+except ImportError:
+    from django.core.cache import get_cache
+    
 from cached_hitcount.settings import CACHED_HITCOUNT_CACHE, CACHED_HITCOUNT_ENABLED, CACHED_HITCOUNT_LOCK_KEY
 
 # this is not intended to be an all-knowing IP address regex
