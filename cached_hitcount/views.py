@@ -105,4 +105,4 @@ def update_hit_count_ajax(request):
     if CACHED_HITCOUNT_SERVER_CALLBACKS:
         result_dict.update(call_custom_callbacks(request, object_pk=object_pk, ctype_pk =ctype_pk))
 
-    return HttpResponse(json.dumps(result_dict),mimetype="application/json")
+    return HttpResponse(json.dumps(result_dict), content_type="application/json")

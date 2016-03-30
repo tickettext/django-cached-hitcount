@@ -59,7 +59,7 @@ class Hit(models.Model):
 class BlacklistIPManager(models.Manager):
     def set_cache(self):
         hitcount_cache = get_hitcount_cache()
-        blacklist_ips = list(self.get_query_set().values_list('ip',flat=True))
+        blacklist_ips = list(self.get_queryset().values_list('ip', flat=True))
         hitcount_cache.set(CACHED_HITCOUNT_IP_CACHE, blacklist_ips, CACHED_HITCOUNT_IP_CACHE_TIMEOUT)
         return blacklist_ips
 
