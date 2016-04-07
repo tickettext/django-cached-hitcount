@@ -4,7 +4,13 @@ from memcached_stats import MemcachedStats
 import logging
 
 
-from django.core.cache import parse_backend_conf
+# from django.core.cache import parse_backend_conf
+from django.conf import settings
+from django.utils.module_loading import import_by_path
+from django.core.exceptions import ImproperlyConfigured
+from django.core.cache.backends.base import (
+    InvalidCacheBackendError, CacheKeyWarning, BaseCache)
+
 from django.contrib.contenttypes.models import ContentType
 
 try:
@@ -17,6 +23,29 @@ from cached_hitcount.settings import CACHED_HITCOUNT_CACHE, CACHED_HITCOUNT_CACH
 from cached_hitcount.models import Hit
 
 logger = logging.getLogger(__name__)
+
+def parse_backend_conf(backend, **kwargs):
+    """
+    Helper function to parse the backend configuration
+    that doesn't use the URI notation.
+    """
+    # Try to get the CACHES entry for the given backend name first
+    conf = settings.CACHES.get(backend, None)
+    if conf is not None:
+        args = conf.copy()
+        args.update(kwargs)
+        backend = args.pop('BACKEND')
+        location = args.pop('LOCATION', '')
+        return backend, location, args
+    else:
+        try:
+            # Trying to import the given backend, in case it's a dotted path
+            import_by_path(backend)
+        except ImproperlyConfigured as e:
+            raise InvalidCacheBackendError("Could not find backend '%s': %s" % (
+                backend, e))
+        location = kwargs.pop('LOCATION', '')
+        return backend, location, kwargs
 
 @periodic_task(run_every=timedelta(minutes=5))
 def persist_hits():
