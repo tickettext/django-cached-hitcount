@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import datetime
+from cached_hitcount.utils import get_current_date 
 
 
 class Migration(migrations.Migration):
@@ -15,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='hit',
             name='added',
-            field=models.DateField(default=datetime.datetime.utcnow().date(), db_index=True),
+            field=models.DateField(default=get_current_date, db_index=True),
         ),
     ]

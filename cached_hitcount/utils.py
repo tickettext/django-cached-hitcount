@@ -147,3 +147,5 @@ def release_lock():
     hitcount_cache.delete(CACHED_HITCOUNT_LOCK_KEY)
     #print  'release %s lock = %s' % (CACHED_HITCOUNT_LOCK_KEY, hitcount_cache.get(CACHED_HITCOUNT_LOCK_KEY))
 
+def get_current_date():
+    return datetime.utcnow().date()

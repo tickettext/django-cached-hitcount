@@ -11,7 +11,7 @@ except ImportError:
 from django.dispatch import Signal
 
 from cached_hitcount.settings import CACHED_HITCOUNT_IP_CACHE_TIMEOUT, CACHED_HITCOUNT_IP_CACHE
-from cached_hitcount.utils import get_hitcount_cache, get_target_ctype_pk
+from cached_hitcount.utils import get_hitcount_cache, get_target_ctype_pk, get_current_date
 # SIGNALS #
 def process_object_saved(sender, **kwargs):
     """ Called when an object is saved. It will create an initial Hit entry with 0 hits """
@@ -33,7 +33,7 @@ class Hit(models.Model):
     '''
 
     hits = models.PositiveIntegerField(default=0)
-    added        = models.DateField(default=datetime.datetime.utcnow().date(), db_index=True)
+    added        = models.DateField(default=get_current_date, db_index=True)
     content_type    = models.ForeignKey(ContentType,
                         verbose_name="content type",
                         related_name="content_type_set_for_%(class)s", db_index=True)
