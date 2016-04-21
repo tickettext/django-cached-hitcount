@@ -21,16 +21,15 @@ setup(
     packages=find_packages(),
     long_description=read('README.md'),
     install_requires=[
-        'Django>=1.4,<1.7',
+        'Django>=1.7',
         'python-memcached-stats==0.1',#git+git://github.com/dlrust/python-memcached-stats.git
-        'nexus',
+        'nexus-yplan',
         'django-jsonfield<0.9.4',
         'billiard',
         'python-dateutil',
-        'gargoyle',
+        'gargoyle-yplan',
         'django-celery',
         'python-memcached',
-        'south',
         'pyyaml',
         'ua-parser',
         'user-agents'

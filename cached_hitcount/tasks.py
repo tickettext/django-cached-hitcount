@@ -6,8 +6,7 @@ import logging
 
 # from django.core.cache import parse_backend_conf
 from django.conf import settings
-from django.utils.module_loading import import_by_path
-from django.core.exceptions import ImproperlyConfigured
+from django.utils.module_loading import import_string
 from django.core.cache.backends.base import (
     InvalidCacheBackendError, CacheKeyWarning, BaseCache)
 
@@ -41,7 +40,7 @@ def parse_backend_conf(backend, **kwargs):
         try:
             # Trying to import the given backend, in case it's a dotted path
             import_by_path(backend)
-        except ImproperlyConfigured as e:
+        except ImportError as e:
             raise InvalidCacheBackendError("Could not find backend '%s': %s" % (
                 backend, e))
         location = kwargs.pop('LOCATION', '')
